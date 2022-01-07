@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>Frog Jump</title>
 
     <!-- Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -103,10 +103,11 @@
                     $("#trq").html(o["time_req"]);
                     $("#msg").html(o["msg"]);
                },
-               error: function(o){
+               error: function(o,m,n){
+                    var o = o.responseJSON;
                     $("#pg").html(o["X"]);
                     $("#trq").html(o["time_req"]);
-                    $("#msg").html(o["msg"]);
+                    $("#msg").html(JSON.stringify(o["msg"]));
                }
             });
         }

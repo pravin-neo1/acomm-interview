@@ -2,24 +2,30 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from app1.models import solution
 from app1.serializers import SolutionSerializer
 
 
 class SolutionViewset(APIView):
 
     def post(self, request):
-        solution_serializer = SolutionSerializer(data=request.data)
-        if solution_serializer.is_valid():
-            time_req, msg = solution(**request.data)
+        ss = SolutionSerializer(data=request.data)
+        if ss.is_valid():
             data = {
-                "time_req": time_req,
-                "X": solution_serializer.validated_data["X"],
-                "msg": msg
+                "X": ss.data["X"],
+                "time_req": ss.data["time_req"],
+                "msg": "Can't jump!" if ss.data["time_req"] == -1 else "Jump successfully"
             }
-            return Response(data=data, status=status.HTTP_200_OK)
+            return Response(
+                data=data,
+                status=status.HTTP_200_OK if ss.data["time_req"] != -1 else status.HTTP_400_BAD_REQUEST
+            )
         else:
-            return Response({"msg": solution_serializer.error_messages}, status=status.HTTP_400_BAD_REQUEST)
+            data = {
+                "X": ss.data["X"],
+                "time_req": -1,
+                "msg": ss.errors
+            }
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
 
 
